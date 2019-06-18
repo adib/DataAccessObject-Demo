@@ -90,7 +90,7 @@ class ReminderListTableViewController: UITableViewController {
         guard let itemList = self.reminderItems else {
             return 0
         }
-        return itemList.items.count
+        return itemList.itemCount
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -98,7 +98,7 @@ class ReminderListTableViewController: UITableViewController {
             return UITableViewCell()
         }
         let row = indexPath.row
-        let item = itemList.items[row]
+        let item = itemList.item(atIndex: row)
         let cell = tableView.dequeueReusableCell(withIdentifier: "reminderItemCell", for: indexPath) as! ReminderItemTableViewCell
         cell.item = item
         return cell
@@ -139,6 +139,25 @@ class ReminderListTableViewController: UITableViewController {
     }
     */
 
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let dao = self.reminderDAO, let items = self.reminderItems else {
+            return
+        }
+        let row = indexPath.row
+        let itemModel = items.item(atIndex: row)
+        let completionDate = Date()
+        dao.retrieveReminderItem(reminderID: itemModel.recordID!, { (obj) -> DataAccessCompletion in
+            obj!.completedTimestamp = completionDate
+            return .commit
+        }) { (error) in
+            if error == nil {
+                DispatchQueue.main.async {
+                    self.reloadData()
+                }
+            }
+        }
+        
+    }
     /*
     // MARK: - Navigation
 

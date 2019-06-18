@@ -11,6 +11,14 @@ import ReminderDataModel
 
 class ReminderListViewModel: NSObject {
     var items = [ReminderItemViewModel]()
+    var itemCount: Int {
+        return items.count
+    }
+    
+    func item(atIndex i: Int) -> ReminderItemViewModel {
+        return items[i]
+    }
+    
 }
 
 

@@ -10,6 +10,7 @@ import Foundation
 import ReminderDataModel
 
 class ReminderItemViewModel: NSObject {
+    
     static let completionTimeFormatter: DateFormatter = {
         let df = DateFormatter()
         df.dateStyle = .medium
@@ -18,6 +19,7 @@ class ReminderItemViewModel: NSObject {
     }()
     
     var title: String?
+    var recordID: UUID?
     var completionTimestamp: Date?
     var isCompleted: Bool {
         get {
@@ -39,6 +41,7 @@ class ReminderItemViewModel: NSObject {
 extension ReminderItemViewModel {
     func populateFrom(reminderItem item: ReminderItem) {
         self.title = item.title
+        self.recordID = item.reminderID
         self.completionTimestamp = item.completedTimestamp
     }
     
