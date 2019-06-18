@@ -18,7 +18,6 @@ class ReminderListViewModel: NSObject {
     func item(atIndex i: Int) -> ReminderItemViewModel {
         return items[i]
     }
-    
 }
 
 
