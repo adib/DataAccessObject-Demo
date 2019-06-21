@@ -35,14 +35,16 @@ class ReminderListTableViewController: UITableViewController {
         guard let dao = self.reminderDAO else {
             return
         }
-        dao.listAllReminderItems({ (loadedItems) -> DataAccessCompletion in
-            let reminderItems = ReminderListViewModel(items: loadedItems)
-            DispatchQueue.main.async {
-                self.reminderItems = reminderItems
-                self.tableView.reloadData()
-            }
-            return .rollback
-        }, nil)
+        dao.listAllReminderItems(
+            resultHandler: {
+                (loadedItems) -> DataAccessCompletion in
+                let reminderItems = ReminderListViewModel(items: loadedItems)
+                DispatchQueue.main.async {
+                    self.reminderItems = reminderItems
+                    self.tableView.reloadData()
+                }
+                return .rollback
+            }, completionHandler: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -66,16 +68,20 @@ class ReminderListTableViewController: UITableViewController {
         alertCtrl.addAction(UIAlertAction(title: NSLocalizedString("Add", comment: "Alert Action"), style: .default, handler: {
             (UIAlertAction) -> Void in
             let itemTitle = reminderTitleTextField?.text
-            dao.insertReminderItem({ (item: ReminderItem) -> DataAccessCompletion in
-                item.title = itemTitle
-                return .commit
-            }, { (error) in
-                if error == nil {
-                    DispatchQueue.main.async {
-                        self.reloadData()
+            dao.insertReminderItem(
+                resultHandler: {
+                    (item: ReminderItem) -> DataAccessCompletion in
+                    item.title = itemTitle
+                    return .commit
+                },
+                completionHandler: {
+                    (error) in
+                    if error == nil {
+                        DispatchQueue.main.async {
+                            self.reloadData()
+                        }
                     }
-                }
-            })
+                })
         }))
         self.present(alertCtrl, animated: true, completion: nil)
     }
@@ -112,15 +118,19 @@ class ReminderListTableViewController: UITableViewController {
         let row = indexPath.row
         let itemModel = items.item(atIndex: row)
         let completionDate = Date()
-        dao.retrieveReminderItem(reminderID: itemModel.recordID!, { (obj) -> DataAccessCompletion in
-            obj!.completedTimestamp = completionDate
-            return .commit
-        }) { (error) in
+        dao.retrieveReminderItem(
+            reminderID: itemModel.recordID!,
+            resultHandler: {
+                (obj) -> DataAccessCompletion in
+                obj!.completedTimestamp = completionDate
+                return .commit
+            },
+            completionHandler:  { (error) in
             if error == nil {
                 DispatchQueue.main.async {
                     self.reloadData()
                 }
             }
-        }
+        })
     }
 }

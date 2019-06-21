@@ -38,7 +38,7 @@ public class ReminderDAOImpl: ReminderDAO {
         self.persistence = persistence
     }
 
-    func call<ResultType>(process: @escaping (_ context: NSManagedObjectContext) throws -> ResultType, handler: @escaping (ResultType) throws -> DataAccessCompletion, completion: ((Error?) -> Void)?) {
+    func perform<ResultType>(process: @escaping (_ context: NSManagedObjectContext) throws -> ResultType, handler: @escaping (ResultType) throws -> DataAccessCompletion, completion: ((Error?) -> Void)?) {
         let ctx = self.persistence.newBackgroundContext()
         ctx.perform {
             do {
@@ -59,25 +59,25 @@ public class ReminderDAOImpl: ReminderDAO {
     }
 
     func perform<Entity>(fetch: NSFetchRequest<Entity>, handler: @escaping ([Entity]) -> DataAccessCompletion, completion: ((Error?) -> Void)?) {
-        self.call(process: {
+        self.perform(process: {
             try $0.fetch(fetch)
         }, handler: handler, completion: completion)
     }
 
-    public func listAllReminderItems(_ handler: @escaping ([ReminderItem]) -> DataAccessCompletion, _ completionStatus: ((Error?) -> Void)?) {
+    public func listAllReminderItems(resultHandler: @escaping ([ReminderItem]) -> DataAccessCompletion, completionHandler: ((Error?) -> Void)?) {
         let fetch: NSFetchRequest<ReminderObj> = ReminderObj.fetchRequest()
-        self.perform(fetch: fetch, handler: handler, completion: completionStatus)
+        self.perform(fetch: fetch, handler: resultHandler, completion: completionHandler)
     }
     
-    public func retrieveReminderItem(reminderID: UUID, _ handler: @escaping (ReminderItem?) -> DataAccessCompletion, _ completionStatus: ((Error?) -> Void)?) {
+    public func retrieveReminderItem(reminderID: UUID, resultHandler: @escaping (ReminderItem?) -> DataAccessCompletion, completionHandler: ((Error?) -> Void)?) {
         let fetch: NSFetchRequest<ReminderObj> = ReminderObj.fetchRequest()
         fetch.predicate = NSPredicate.init(format: "%K == %@", #keyPath(ReminderObj.reminderID), reminderID as CVarArg)
         fetch.fetchLimit = 1
-        self.perform(fetch: fetch, handler: { handler($0.first) }, completion: completionStatus)
+        self.perform(fetch: fetch, handler: { resultHandler($0.first) }, completion: completionHandler)
     }
     
-    public func insertReminderItem(_ handler: @escaping (ReminderItem) -> DataAccessCompletion, _ completionStatus: ((Error?) -> Void)?) {
-        self.call(process: {ReminderObj.init(context: $0)}, handler: handler, completion: completionStatus)
+    public func insertReminderItem(resultHandler: @escaping (ReminderItem) -> DataAccessCompletion, completionHandler: ((Error?) -> Void)?) {
+        self.perform(process: {ReminderObj.init(context: $0)}, handler: resultHandler, completion: completionHandler)
     }
 }
 
