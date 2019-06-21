@@ -33,13 +33,13 @@ public extension ReminderObj {
 
 
 public class ReminderDAOImpl: ReminderDAO {
-    let managedObjectContext: NSManagedObjectContext
-    init(_ context: NSManagedObjectContext) {
-        managedObjectContext = context
+    let persistence: NSPersistentContainer
+    init(_ persistence: NSPersistentContainer) {
+        self.persistence = persistence
     }
 
     func call<ResultType>(process: @escaping (_ context: NSManagedObjectContext) throws -> ResultType, handler: @escaping (ResultType) throws -> DataAccessCompletion, completion: ((Error?) -> Void)?) {
-        let ctx = self.managedObjectContext
+        let ctx = self.persistence.newBackgroundContext()
         ctx.perform {
             do {
                 let result = try process(ctx)
@@ -89,8 +89,7 @@ var persistentContainerMap = [String:NSPersistentContainer]()
 public func makeReminderDAO(file:URL, handler: @escaping (ReminderDAO) -> () ) {
     let returnDAO = {
         (container: NSPersistentContainer) in
-        let ctx = container.newBackgroundContext()
-        let dao = ReminderDAOImpl(ctx)
+        let dao = ReminderDAOImpl(container)
         handler(dao)
     }
     persistentContainerQueue.async {
