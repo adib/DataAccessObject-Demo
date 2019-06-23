@@ -121,6 +121,7 @@
 		C03FFF5D22B7A1F7009CADB5 /* DataAccessObject_DemoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataAccessObject_DemoTests.swift; sourceTree = "<group>"; };
 		C03FFF5F22B7A1F7009CADB5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C03FFF6E22B7A34C009CADB5 /* ReminderModelInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderModelInterface.swift; sourceTree = "<group>"; };
+		C07418FC22BF7D15003C2D57 /* README.markdown */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.markdown; sourceTree = "<group>"; };
 		C0BED9EE22B7A4D40008F825 /* ReminderDataModelImp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderDataModelImp.swift; sourceTree = "<group>"; };
 		C0BED9F522B7BBEB0008F825 /* ReminderDataModel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ReminderDataModel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C0BED9F722B7BBEB0008F825 /* ReminderDataModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ReminderDataModel.h; sourceTree = "<group>"; };
@@ -214,6 +215,7 @@
 		C03FFF3922B7A1F5009CADB5 = {
 			isa = PBXGroup;
 			children = (
+				C07418FC22BF7D15003C2D57 /* README.markdown */,
 				C03FFF4422B7A1F5009CADB5 /* DataAccessObject-Demo */,
 				C03FFF5C22B7A1F7009CADB5 /* DataAccessObject-DemoTests */,
 				C0BED9F622B7BBEB0008F825 /* ReminderDataModel */,
