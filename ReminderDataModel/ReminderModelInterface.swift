@@ -21,7 +21,7 @@
 import Foundation
 
 
-public enum DataAccessCompletion {
+public enum TransactionStatus {
     case commit
     case rollback
 }
@@ -35,7 +35,20 @@ public protocol ReminderItem : class {
 
 
 public protocol ReminderDAO {
-    func listAllReminderItems(resultHandler:  @escaping ([ReminderItem]) -> DataAccessCompletion, completionHandler: ((Error?) -> Void)?) 
-    func retrieveReminderItem(reminderID: UUID, resultHandler:  @escaping(ReminderItem?) -> DataAccessCompletion, completionHandler:  ((Error?) -> Void)?)
-    func insertReminderItem(resultHandler:  @escaping(ReminderItem) -> DataAccessCompletion, completionHandler:  ((Error?) -> Void)?)
+    
+    func listAllReminderItems(
+        resultHandler:  @escaping ([ReminderItem]) -> TransactionStatus,
+        completionHandler: ((Error?) -> Void)?
+    )
+    
+    func retrieveReminderItem(
+        reminderID: UUID,
+        resultHandler:  @escaping(ReminderItem?) -> TransactionStatus,
+        completionHandler:  ((Error?) -> Void)?
+    )
+    
+    func insertReminderItem(
+        resultHandler:  @escaping(ReminderItem) -> TransactionStatus,
+        completionHandler:  ((Error?) -> Void)?
+    )
 }

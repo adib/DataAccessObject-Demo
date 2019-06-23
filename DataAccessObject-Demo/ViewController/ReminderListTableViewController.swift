@@ -37,7 +37,7 @@ class ReminderListTableViewController: UITableViewController {
         }
         dao.listAllReminderItems(
             resultHandler: {
-                (loadedItems) -> DataAccessCompletion in
+                (loadedItems) -> TransactionStatus in
                 let reminderItems = ReminderListViewModel(items: loadedItems)
                 DispatchQueue.main.async {
                     self.reminderItems = reminderItems
@@ -70,7 +70,7 @@ class ReminderListTableViewController: UITableViewController {
             let itemTitle = reminderTitleTextField?.text
             dao.insertReminderItem(
                 resultHandler: {
-                    (item: ReminderItem) -> DataAccessCompletion in
+                    (item: ReminderItem) -> TransactionStatus in
                     item.title = itemTitle
                     return .commit
                 },
@@ -121,7 +121,7 @@ class ReminderListTableViewController: UITableViewController {
         dao.retrieveReminderItem(
             reminderID: itemModel.recordID!,
             resultHandler: {
-                (obj) -> DataAccessCompletion in
+                (obj) -> TransactionStatus in
                 obj!.completedTimestamp = completionDate
                 return .commit
             },
