@@ -1,6 +1,6 @@
 # Data Access Object Demo App.
 
-This demonstrates an implementation of the Data Access Object design pattern as an iOS To-Do application. 
+This demonstrates an implementation of the [Data Access Object](https://en.wikipedia.org/wiki/Data_access_object) design pattern as an iOS To-Do application. 
 
 The app consists of three main targets:
 
